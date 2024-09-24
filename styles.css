@@ -1,0 +1,577 @@
+/* Estilos da Página Inicial */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Altura total da viewport */
+    overflow: hidden; /* Impede rolagem */
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.allrecipes.com/thmb/i9KCEbxUGQ1Sa4F7Gts7SGBOpoM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/157877-vanilla-cupcakes-ddmfs-4X3-0397-59653731be1d4769969698e427d7f5bc.jpg');
+    background-size: cover; /* Faz a imagem cobrir todo o fundo */
+    background-position: center; /* Centraliza a imagem */
+    filter: blur(5px) brightness(50%); /* Desfoque e escurecimento */
+    z-index: 1; /* Coloca atrás dos botões */
+}
+
+.buttons-container {
+    position: relative; /* Para garantir que fique acima do fundo */
+    z-index: 2; /* Coloca acima da imagem de fundo */
+    display: flex; /* Alinha os botões lado a lado */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    align-items: center; /* Centraliza os botões verticalmente */
+    height: 100%;
+}
+
+.button {
+    padding: 20px 40px; /* Tamanho dos botões */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px; /* Espaçamento entre os botões */
+    font-size: 20px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    background-color: #DEB887; /* Cor cappuccino claro */
+    color: white; /* Texto claro */
+    text-decoration: none; /* Remove sublinhado */
+    text-align: center; /* Centraliza o texto */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Efeito hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra ao redor dos botões */
+}
+
+.button:hover {
+    background-color: #C49C89; /* Tom mais escuro ao passar o mouse */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5); /* Sombra mais intensa ao passar o mouse */
+}
+
+/* Estilos da Página do Cardápio */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #DEB887; /* Cor cappuccino claro */
+    position: relative; /* Para garantir que fique acima do fundo */
+    z-index: 2; /* Coloca acima da imagem de fundo */
+}
+
+.nav-left, .nav-right {
+    display: flex;
+}
+
+.nav-link {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #C49C89; /* Tom mais escuro ao passar o mouse */
+}
+
+/* Estilos da Página do Carrinho */
+.cart-container {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Fundo branco com leve transparência */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 800px; /* Limita a largura do carrinho */
+    margin: auto; /* Centraliza o carrinho */
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white; /* Fundo dos itens do carrinho */
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px; /* Espaçamento entre os itens */
+}
+
+.cart-item img {
+    width: 80px; /* Tamanho da imagem do produto */
+    height: auto;
+    border-radius: 5px; /* Bordas arredondadas */
+}
+
+.cart-item h3 {
+    margin: 0;
+    flex-grow: 1; /* Para ocupar o espaço disponível */
+    margin-left: 10px; /* Espaço à esquerda do nome do item */
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-btn {
+    background-color: #DEB887;
+    border: none;
+    padding: 10px;
+    width: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.quantity-btn:hover {
+    background-color: #C49C89;
+}
+
+.quantity {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Estilo do botão "Remover" */
+.remove-item {
+    background-color: #FF6347; /* Vermelho para remover */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.remove-item:hover {
+    background-color: #FF4500; /* Tom mais escuro ao passar o mouse */
+}
+
+/* Estilo do total do carrinho */
+#cart-total {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* Botão de finalizar pedido */
+#finalize-order {
+    background-color: #4CAF50; /* Verde para finalizar */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 20px auto; /* Centraliza o botão */
+}
+
+#finalize-order:hover {
+    background-color: #388E3C; /* Tom mais escuro ao passar o mouse */
+}
+
+/* Estilos da tela de finalização */
+.finalize-modal {
+    display: none; /* Inicialmente escondido */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 3; /* Acima de tudo */
+    justify-content: center;
+    align-items: center;
+}
+
+.finalize-content {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 400px; /* Largura da tela de finalização */
+    width: 80%;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.finalize-content h2 {
+    margin-bottom: 20px;
+}
+
+.finalize-button {
+    background-color: #DEB887; /* Cor cappuccino claro */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.finalize-button:hover {
+    background-color: #C49C89; /* Tom mais escuro ao passar o mouse */
+}
+
+/* Estilos Adicionais para o Cardápio */
+.menu-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 50px;
+}
+
+.menu-item {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    width: 300px; /* Aumenta o tamanho dos itens */
+}
+
+.menu-item img {
+    width: 100%; /* Ocupa toda a largura disponível */
+    border-radius: 5px;
+    height: auto;
+}
+
+/* Estilização do preço, maior e mais destacado */
+.price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #8B4513; /* Cor cappuccino escuro */
+}
+
+/* Botões de controle de quantidade */
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.quantity-btn {
+    background-color: #DEB887;
+    border: none;
+    padding: 10px;
+    width: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    margin: 0 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.quantity-btn:hover {
+    background-color: #C49C89;
+}
+
+/* Centraliza o valor da quantidade */
+.quantity {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Estilo do botão "Adicionar ao Carrinho" */
+.add-to-cart {
+    background-color: #DEB887;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+}
+
+.add-to-cart:hover {
+    background-color: #C49C89;
+}
+
+/* Estilos da Tela de Finalização do Pedido */
+/* Estilos da Tela de Finalização do Pedido */
+.finalize-modal {
+    display: none; /* Inicialmente escondido */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro */
+    z-index: 3; /* Acima de tudo */
+    justify-content: center;
+    align-items: center;
+}
+
+.finalize-content {
+    background-color: white;
+    border-radius: 15px; /* Bordas arredondadas */
+    padding: 30px;
+    max-width: 500px; /* Largura da tela de finalização */
+    width: 80%;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra mais intensa */
+    position: relative; /* Necessário para posicionar o "X" de fechar */
+}
+
+/* X para fechar a tela */
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #8B4513; /* Cor cappuccino escuro */
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: #C49C89; /* Tom mais claro ao passar o mouse */
+}
+
+.finalize-content h2 {
+    font-size: 24px;
+    color: #8B4513; /* Cor cappuccino escuro */
+    margin-bottom: 20px;
+}
+
+/* Opções de entrega ou retirada */
+.delivery-options {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.delivery-options label {
+    display: block; /* Coloca cada opção em uma nova linha */
+    margin-bottom: 10px; /* Espaçamento entre as opções */
+    font-weight: bold;
+    color: #8B4513; /* Cor cappuccino escuro */
+}
+
+/* Opções de pagamento */
+.payment-options {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.payment-options label {
+    display: block; /* Coloca cada opção em uma nova linha */
+    margin-bottom: 10px; /* Espaçamento entre as opções */
+    font-weight: bold;
+    color: #8B4513; /* Cor cappuccino escuro */
+}
+
+/* Botão para confirmar o pedido */
+#confirm-order {
+    background-color: #DEB887; /* Mantém a cor do site */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#confirm-order:hover {
+    background-color: #C49C89; /* Tom mais escuro ao passar o mouse */
+}
+
+/* Estilos da Página de Login/Registro */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    z-index: 2;
+}
+
+.background-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.allrecipes.com/thmb/i9KCEbxUGQ1Sa4F7Gts7SGBOpoM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/157877-vanilla-cupcakes-ddmfs-4X3-0397-59653731be1d4769969698e427d7f5bc.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px) brightness(50%);
+    z-index: 1;
+}
+
+.login-form, .register-form {
+    z-index: 3;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 300px;
+}
+
+.login-form h2, .register-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.login-form input, .register-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.login-btn {
+    background-color: #DEB887;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #C49C89;
+}
+
+.register-link {
+    display: block;
+    margin-top: 10px;
+    color: #DEB887;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link:hover {
+    color: #C49C89;
+}
+
+/* Navbar Estilos */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #DEB887;
+    position: relative;
+    z-index: 4; /* Para ficar acima do background */
+}
+
+.nav-left, .nav-right {
+    display: flex;
+}
+
+.nav-link {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #C49C89;
+}
+
+input {
+    width: 100%; /* Ocupa toda a largura do formulário */
+    padding: 10px;
+    margin-bottom: 10px; /* Espaçamento entre os campos */
+    border: 1px solid #ccc; /* Bordas suaves */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+}
+
+/* Para alinhar o texto nos inputs */
+input::placeholder {
+    text-align: center; /* Centraliza o texto do placeholder */
+}
+
+/* Estilo do formulário */
+.login-form, .register-form {
+    display: flex;
+    flex-direction: column; /* Alinha os itens em coluna */
+    align-items: center; /* Centraliza os itens no eixo horizontal */
+}
+
+/* Estilos gerais dos botões */
+.button-group {
+    display: flex; /* Alinha os botões lado a lado */
+    gap: 10px; /* Espaçamento entre os botões */
+    margin-bottom: 20px; /* Espaçamento inferior */
+}
+
+.delivery-button, .payment-button {
+    padding: 10px 20px; /* Tamanho dos botões */
+    background-color: #DEB887; /* Cor cappuccino claro */
+    color: white; /* Texto claro */
+    border: none; /* Remove bordas padrão */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Muda o cursor ao passar */
+    font-size: 18px; /* Tamanho da fonte */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Efeito hover */
+}
+
+/* Estilo quando o botão é selecionado */
+.selected {
+    background-color: #8B4513; /* Cor cappuccino escuro */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para destaque */
+}
+
+/* Efeito hover para os botões não selecionados */
+.delivery-button:hover:not(.selected), .payment-button:hover:not(.selected) {
+    background-color: #C49C89; /* Tom mais escuro ao passar o mouse */
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 600px; /* Define uma largura máxima para centralizar */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    padding: 20px;
+    text-align: center; /* Centraliza o texto */
+    background-color: rgba(255, 255, 255, 0.9); /* Fundo branco com transparência */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+.profile-info {
+    margin: 20px 0; /* Margem superior e inferior */
+}
+
+.btn {
+    background-color: #DEB887; /* Cor de fundo do botão */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #ff1493; /* Cor ao passar o mouse */
+}
+

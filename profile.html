@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Perfil do Usuário</title>
+    <style>
+        .orders-list {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .orders-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-list th, .orders-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .orders-list th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="nav-link">HOME</a>
+            <a href="menu.html" class="nav-link">CARDÁPIO</a>
+        </div>
+        <div class="nav-right">
+            <a href="#" class="nav-link" id="profile-link">Perfil</a>
+            <a href="login.html" class="nav-link" id="login-link" style="display: none;">Login</a>
+            <a href="#" class="nav-link" id="logout">Sair</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Perfil do Usuário</h1>
+        <div class="profile-info" style="text-align: center;">
+            <h2>Dados do Usuário</h2>
+            <p><strong>Nome:</strong> <span id="user-name"></span></p>
+            <p><strong>Email:</strong> <span id="user-email"></span></p>
+            <p><strong>Endereço:</strong> <span id="user-address"></span></p>
+        </div>
+        <button id="check-orders" class="btn">Ver Últimos Pedidos</button>
+        <button id="clear-orders" class="btn" style="display: none;">Limpar Últimos Pedidos</button>
+        
+        <div class="orders-list" id="orders-list" style="display: none;">
+            <h2>Últimos Pedidos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Pedido</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-tbody">
+                    <!-- Os pedidos serão inseridos aqui -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function loadUserData() {
+            const loggedUser = localStorage.getItem('loggedUser');
+            if (loggedUser) {
+                const userData = JSON.parse(localStorage.getItem(loggedUser));
+
+                if (userData) {
+                    document.getElementById('user-name').textContent = userData.nome;
+                    document.getElementById('user-email').textContent = loggedUser;
+                    document.getElementById('user-address').textContent = userData.rua + ", " + userData.numero;
+                } else {
+                    alert('Usuário não encontrado.');
+                }
+            } else {
+                alert('Por favor, faça login para ver seu perfil.');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('loggedUser');
+            alert('Você foi deslogado.');
+            window.location.href = 'login.html';
+        }
+
+        function loadOrders() {
+            const loggedUser = localStorage.getItem('loggedUser');
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || {};
+
+            const ordersTbody = document.getElementById('orders-tbody');
+            ordersTbody.innerHTML = '';
+
+            if (orders[loggedUser] && orders[loggedUser].length > 0) {
+                const lastOrder = orders[loggedUser][orders[loggedUser].length - 1]; // Pega o último pedido
+                const orderDate = new Date(lastOrder.date).toLocaleDateString();
+                const orderItems = lastOrder.items.map(item => `${item.name} (R$${item.price.toFixed(2)})`).join(', ');
+                const orderTotal = `R$${lastOrder.total.toFixed(2)}`;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${orderDate}</td><td>${orderItems}</td><td>${orderTotal}</td>`;
+                ordersTbody.appendChild(row);
+                document.getElementById('clear-orders').style.display = 'block';
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="3">Nenhum pedido encontrado.</td>';
+                ordersTbody.appendChild(row);
+                document.getElementById('clear-orders').style.display = 'none';
+            }
+        }
+
+        function clearOrders() {
+            const loggedUser = localStorage.getItem('loggedUser');
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || {};
+
+            if (orders[loggedUser]) {
+                delete orders[loggedUser];
+                localStorage.setItem('userOrders', JSON.stringify(orders));
+                alert('Últimos pedidos limpos com sucesso!');
+                loadOrders();
+            } else {
+                alert('Não há pedidos para limpar.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            document.getElementById('logout').onclick = handleLogout;
+
+            document.getElementById('check-orders').onclick = function() {
+                const ordersList = document.getElementById('orders-list');
+                ordersList.style.display = ordersList.style.display === 'none' ? 'block' : 'none';
+                loadOrders(); // Carrega os pedidos
+            };
+
+            document.getElementById('clear-orders').onclick = clearOrders;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho - Cupcakes</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos para o modal */
+        .finalize-modal,
+        .delivery-modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); 
+        }
+        .finalize-content,
+        .delivery-modal-content {
+            background-color: white; 
+            margin: 15% auto; 
+            padding: 20px; 
+            border: 1px solid #888; 
+            width: 80%; 
+            max-width: 500px; 
+        }
+        .selected {
+            background-color: #d9d9d9; 
+        }
+        .alert {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegação -->
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="nav-link">HOME</a>
+        </div>
+        <div class="nav-right">
+            <a href="carrinho.html" class="nav-link">CARRINHO</a>
+            <a href="menu.html" class="nav-link">CARDÁPIO</a>
+            <a href="login.html" class="nav-link" id="login-link">LOGIN</a>
+            <a href="profile.html" class="nav-link" id="profile-link" style="display: none;">PERFIL</a>
+        </div>
+    </div>
+
+    <div class="cart-container">
+        <div class="cart-items" id="cart-items"></div>
+        <div id="cart-total">
+            <h2>Total: R$<span id="total-value">0.00</span></h2>
+        </div>
+        <button id="finalize-order" class="finalize-btn">Finalizar Pedido</button>
+    </div>
+
+    <!-- Tela de Finalização -->
+    <div class="finalize-modal" id="finalizeModal">
+        <div class="finalize-content">
+            <span class="close-modal">&times;</span>
+            <h2>Finalizar Pedido</h2>
+            <div class="delivery-options">
+                <h3>Opções de Entrega</h3>
+                <div class="button-group">
+                    <button class="delivery-button" data-value="delivery">Entrega</button>
+                    <button class="delivery-button" data-value="pickup">Retirada</button>
+                </div>
+                <div class="alert" id="delivery-alert"></div>
+            </div>
+            <div class="payment-options">
+                <h3>Formas de Pagamento</h3>
+                <div class="button-group">
+                    <button class="payment-button" data-value="credit-card">Cartão de Crédito</button>
+                    <button class="payment-button" data-value="cash">Pix</button>
+                </div>
+                <div class="alert" id="payment-alert"></div>
+            </div>
+            <button id="confirm-order">Confirmar Pedido</button>
+        </div>
+    </div>
+
+    <!-- Modal de Endereço de Entrega -->
+    <div class="delivery-modal" id="deliveryModal">
+        <div class="delivery-modal-content">
+            <span class="close-delivery-modal" id="closeDeliveryModal">&times;</span>
+            <h2>Informações de Entrega</h2>
+            <form id="deliveryForm">
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" name="cep" required placeholder="Digite seu CEP">
+                <label for="street">Rua:</label>
+                <input type="text" id="street" name="street" required placeholder="Digite sua rua">
+                <label for="number">Número:</label>
+                <input type="text" id="number" name="number" required placeholder="Número da residência">
+                <button type="submit" class="submit-delivery">Confirmar Entrega</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+    <script>
+        // Atualiza a navbar com base no login
+        function updateNavbar() {
+            const loggedUser = localStorage.getItem('loggedUser');
+            document.getElementById('login-link').style.display = loggedUser ? 'none' : 'block'; 
+            document.getElementById('profile-link').style.display = loggedUser ? 'block' : 'none'; 
+        }
+
+        document.addEventListener('DOMContentLoaded', updateNavbar);
+
+        // Função para carregar itens do carrinho do localStorage
+        function loadCartItems() {
+            const storedItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            storedItems.forEach(item => addItemToCart(item, false));
+        }
+
+        // Carregar itens ao iniciar a página
+        document.addEventListener('DOMContentLoaded', loadCartItems);
+
+        const cartItemsContainer = document.getElementById('cart-items');
+        const totalValueSpan = document.getElementById('total-value');
+        let total = 0;
+
+        // Array para manter os itens no carrinho
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+        // Função para adicionar itens ao carrinho
+        function addItemToCart(item, updateStorage = true) {
+            cartItems.push(item); // Adiciona o item ao array de itens do carrinho
+            const cartItemDiv = document.createElement('div');
+            cartItemDiv.className = 'cart-item order-row';
+            cartItemDiv.innerHTML = `<span>${item.name}</span><span>R$${item.price.toFixed(2)}</span>`;
+            cartItemsContainer.appendChild(cartItemDiv);
+            total += item.price; // Atualiza o total
+            totalValueSpan.textContent = total.toFixed(2); // Atualiza o total visível
+
+            if (updateStorage) {
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            }
+        }
+
+        // Função para limpar o carrinho
+        function clearCart() {
+            cartItems = [];
+            cartItemsContainer.innerHTML = '';
+            total = 0;
+            totalValueSpan.textContent = '0.00';
+            localStorage.removeItem('cartItems');
+        }
+
+        const finalizeModal = document.getElementById('finalizeModal');
+        const deliveryModal = document.getElementById('deliveryModal');
+        const deliveryButtons = document.querySelectorAll('.delivery-button');
+        const paymentButtons = document.querySelectorAll('.payment-button');
+        const confirmOrderButton = document.getElementById('confirm-order');
+        const closeFinalizeModal = document.querySelector('.close-modal');
+        const closeDeliveryModal = document.getElementById('closeDeliveryModal');
+
+        // Mostrar modal de finalização
+        document.getElementById('finalize-order').onclick = function () {
+            finalizeModal.style.display = 'block';
+        };
+
+        // Fechar modal de finalização
+        closeFinalizeModal.onclick = function () {
+            finalizeModal.style.display = 'none';
+        };
+
+        // Fechar modal de entrega
+        closeDeliveryModal.onclick = function () {
+            deliveryModal.style.display = 'none';
+        };
+
+        // Seleciona a entrega
+        deliveryButtons.forEach(button => {
+            button.onclick = function () {
+                deliveryButtons.forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+                document.getElementById('delivery-alert').textContent = `Opção de entrega: ${button.dataset.value === 'delivery' ? 'Entrega' : 'Retirada'}`;
+                if (button.dataset.value === 'delivery') {
+                    // Se a entrega for selecionada, não faz nada ainda
+                }
+            };
+        });
+
+        // Seleciona o pagamento
+        paymentButtons.forEach(button => {
+            button.onclick = function () {
+                paymentButtons.forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+                document.getElementById('payment-alert').textContent = `Forma de pagamento: ${button.dataset.value === 'credit-card' ? 'Cartão de Crédito' : 'Pix'}`;
+            };
+        });
+
+        // Confirmar pedido e salvar no localStorage
+        confirmOrderButton.onclick = function () {
+            const loggedUser = localStorage.getItem('loggedUser');
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || {};
+
+            // Verifica se o usuário está logado
+            if (!loggedUser) {
+                alert('Você precisa estar logado para finalizar o pedido.');
+                return;
+            }
+
+            if (!cartItems.length) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            const newOrder = {
+                date: new Date().toISOString(),
+                items: cartItems.map(item => ({ name: item.name, price: item.price })), // Salva os itens do pedido
+                total: total
+            };
+
+            // Atualiza as ordens do usuário
+            if (!orders[loggedUser]) {
+                orders[loggedUser] = [];
+            }
+            orders[loggedUser].push(newOrder);
+            localStorage.setItem('userOrders', JSON.stringify(orders));
+            clearCart(); // Limpa o carrinho
+            finalizeModal.style.display = 'none'; // Fecha modal de finalização
+
+            // Abre modal de entrega se a opção de entrega estiver selecionada
+            const selectedDelivery = document.querySelector('.delivery-button.selected');
+            if (selectedDelivery && selectedDelivery.dataset.value === 'delivery') {
+                deliveryModal.style.display = 'block'; // Exibe o modal de entrega
+            } else {
+                alert('Pedido realizado com sucesso!'); // Se não for entrega, avisa o usuário
+            }
+        };
+
+        // Processar entrega
+        document.getElementById('deliveryForm').onsubmit = function (e) {
+            e.preventDefault();
+            alert('Informações de entrega confirmadas!');
+            deliveryModal.style.display = 'none'; // Fecha modal de entrega
+        };
+
+        // Fechar modal ao clicar fora dele
+        window.onclick = function (event) {
+            if (event.target === finalizeModal) {
+                finalizeModal.style.display = 'none';
+            }
+            if (event.target === deliveryModal) {
+                deliveryModal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

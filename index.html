@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupcakes - Início</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background"></div>
+    
+    <div class="buttons-container">
+        <a href="menu.html" class="button">CARDÁPIO</a>
+        <a href="login.html" class="button" id="loginButton">LOGIN</a>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="nav-link">Início</a>
+            <a href="menu.html" class="nav-link">Cardápio</a>
+        </div>
+        <div class="nav-right">
+            <a href="profile.html" class="nav-link" id="profileLink" style="display: none;">Perfil</a>
+            <a href="#" class="nav-link" id="loginLink">Login</a>
+            <a href="#" class="nav-link" id="logoutLink" style="display: none;">Sair</a>
+        </div>
+    </nav>
+
+    <script src="scripts.js"></script>
+    <script>
+        // Função para verificar o login e atualizar a navbar
+        function checkLoginStatus() {
+            const profileLink = document.getElementById('profileLink');
+            const loginLink = document.getElementById('loginLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const loggedUser = localStorage.getItem('loggedUser');
+
+            if (loggedUser) {
+                profileLink.style.display = 'block';
+                loginLink.textContent = 'PERFIL'; // Muda o texto para "PERFIL"
+                loginLink.href = 'profile.html'; // Define o link para a página de perfil
+                logoutLink.style.display = 'block'; // Exibe o link de logout
+            } else {
+                profileLink.style.display = 'none';
+                loginLink.textContent = 'LOGIN'; // Mantém o texto como "LOGIN"
+                loginLink.href = 'login.html'; // Define o link para a página de login
+                logoutLink.style.display = 'none'; // Oculta o link de logout
+            }
+        }
+
+        // Verifica o login ao carregar a página
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+    </script>
+</body>
+</html>

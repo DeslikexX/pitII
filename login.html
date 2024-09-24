@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Barra de Navegação -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="nav-link">HOME</a>
+        </div>
+        <div class="nav-right">
+            <a href="menu.html" class="nav-link">CARDÁPIO</a>
+            <a href="carrinho.html" class="nav-link">CARRINHO</a>
+            <a href="login.html" id="profileLink" class="nav-link">LOGIN</a> <!-- Inicialmente exibe LOGIN -->
+        </div>
+    </nav>
+
+    <!-- Fundo com desfoque -->
+    <div class="background-blur"></div>
+
+    <!-- Container de Login -->
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Senha" required>
+                <button type="submit" class="login-btn">Entrar</button>
+            </form>
+            <a href="register.html" class="register-link">Criar uma conta</a>
+        </div>
+    </div>
+
+    <script>
+        // Função para verificar o login e atualizar a navbar
+        function checkLoginStatus() {
+            const profileLink = document.getElementById('profileLink');
+            const loggedUser = localStorage.getItem('loggedUser');
+
+            if (loggedUser) {
+                profileLink.textContent = 'Perfil'; // Muda o texto para "Perfil"
+                profileLink.href = 'profile.html'; // Define o link para a página de perfil
+            } else {
+                profileLink.textContent = 'LOGIN'; // Muda o texto para "LOGIN"
+                profileLink.href = '#'; // Mantém como "#" para que não haja link
+            }
+        }
+
+        // Verifica o login ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus(); // Verifica o status ao carregar
+
+            // Simulação de login
+            document.getElementById('loginForm').onsubmit = function(e) {
+                e.preventDefault(); // Impede o envio do formulário
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                // Verifica se o usuário está registrado
+                const storedUser = localStorage.getItem(email);
+
+                if (storedUser) {
+                    const userData = JSON.parse(storedUser);
+
+                    if (userData.senha === password) {
+                        alert('Login realizado com sucesso!');
+                        localStorage.setItem('loggedUser', email);  // Armazena o usuário logado
+                        checkLoginStatus(); // Atualiza a navbar após o login
+                        window.location.href = 'menu.html';  // Redireciona para a página do cardápio
+                    } else {
+                        alert('Senha incorreta.');
+                    }
+                } else {
+                    alert('Usuário não encontrado.');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
